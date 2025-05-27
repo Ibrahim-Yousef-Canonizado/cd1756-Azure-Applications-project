@@ -68,7 +68,7 @@ def login():
         if user is None or not user.check_password(form.password.data):
             app.logger.warning("FAIL LOGIN")
             flash('Invalid username or password')
-            return redirect(url_for('login'))
+        return redirect(url_for('login'))
         login_user(user, remember=form.remember_me.data)
         next_page = request.args.get('next')
         if not next_page or url_parse(next_page).netloc != '':
@@ -134,14 +134,14 @@ def _save_cache(cache):
 def _build_msal_app(cache=None, authority=None):
     # TODO: Return a ConfidentialClientApplication
     return msal.ConfidentialClientApplication(
-         Config.CLIENT_ID, authority=authority or Config.AUTHORITY,
-         client_credential=Config.CLIENT_SECRET, token_cache=cache
+        Config.CLIENT_ID, authority=authority or Config.AUTHORITY,
+        client_credential=Config.CLIENT_SECRET, token_cache=cache
     )
 
 def _build_auth_url(authority=None, scopes=None, state=None):
     # TODO: Return the full Auth Request URL with appropriate Redirect URI
-     return _build_msal_app(authority=authority).get_authorization_request_url(
-         scopes or [],
-         state=state or str(uuid.uuid4()),
-         redirect_uri=url_for('authorized', _external=True, _scheme='https')
-         )
+    return _build_msal_app(authority=authority).get_authorization_request_url(
+        scopes or [],
+        state=state or str(uuid.uuid4()),
+        redirect_uri=url_for('authorized', _external=True, _scheme='https')
+    )
